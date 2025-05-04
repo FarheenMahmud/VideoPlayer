@@ -1,0 +1,24 @@
+// views/dashboard.pug
+doctype html
+html
+  head
+    title Dashboard
+  body
+    h1 Welcome #{username}!
+    nav
+      a(href="/video/dashboard/all") All
+      |  |
+      a(href="/video/dashboard/music") Music
+      |  |
+      a(href="/video/dashboard/sports") Sports
+      |  |
+      a(href="/video/dashboard/news") News
+      |  |
+      a(href="/video/new_video") Upload New Video
+    ul
+      each video in videos
+        li
+          h2= video.title
+          p Category: #{video.category}
+          p Uploader: #{video.uploader}
+          a(href=video.url) Watch

@@ -1,0 +1,20 @@
+// views/new_video.pug
+doctype html
+html
+  head
+    title New Video
+  body
+    h1 Upload New Video
+    form(action="/video/new" method="POST")
+      label(for="title") Title:
+      input(type="text" name="title" required)
+      br
+      label(for="category") Category:
+      input(type="text" name="category" required)
+      br
+      label(for="url") Video URL:
+      input(type="text" name="url" required)
+      br
+      button(type="submit") Upload
+    p
+      a(href="/video/dashboard/all") Back to Dashboard
