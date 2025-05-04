@@ -1,10 +1,11 @@
-// views/dashboard.pug
 doctype html
 html
   head
     title Dashboard
+    link(rel="stylesheet", href="/style.css")
   body
-    h1 Welcome #{username}!
+    header
+      h1 Welcome, #{username}!
     nav
       a(href="/video/dashboard/all") All
       |  |
@@ -15,10 +16,18 @@ html
       a(href="/video/dashboard/news") News
       |  |
       a(href="/video/new_video") Upload New Video
-    ul
-      each video in videos
-        li
-          h2= video.title
-          p Category: #{video.category}
-          p Uploader: #{video.uploader}
-          a(href=video.url) Watch
+      |  |
+      a(href="/logout") Logout
+    main
+      h2 Your Videos
+      if videos.length
+        .video-list
+          each video in videos
+            .video-card
+              h3= video.title
+              p Category: #{video.category}
+              p Uploader: #{video.uploader}
+              video(controls, width="100%")
+                source(src=video.url, type="video/mp4")
+      else
+        p No videos uploaded yet.
