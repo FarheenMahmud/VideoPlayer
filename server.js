@@ -40,5 +40,8 @@ app.use(express.static('public'));
 
 const fs = require('fs');
 const uploadDir = path.join(__dirname, 'resources/uploads');
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+  console.log('Created uploads folder at resources/uploads');
+}
