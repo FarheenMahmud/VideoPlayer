@@ -6,12 +6,9 @@ html
   body
     main
       h1 Upload New Video
-      router.post('/upload', videoController.postNewVideo);
+      form(action="/video/upload", method="POST", enctype="multipart/form-data")
         label(for="title") Title:
         input(type="text", name="title", required)
-        br
-        label(for="description") Description:
-        textarea(name="description", rows="3")
         br
         label(for="category") Category:
         select(name="category")

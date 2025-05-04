@@ -9,12 +9,20 @@ exports.getNewVideo = (req, res) => {
 };
 
 exports.postNewVideo = (req, res) => {
-  const { title, category, url } = req.body;
-  const videos = JSON.parse(fs.readFileSync(videosPath));
-  videos.push({ title, category, url, uploader: req.session.username });
-  fs.writeFileSync(videosPath, JSON.stringify(videos));
-  res.redirect(`/video/dashboard/${category}`);
-};
+    const { title, category } = req.body;
+    const videoFile = req.file;
+  
+    if (!videoFile) return res.status(400).send('No video uploaded');
+  
+    const videoUrl = `/resources/uploads/${videoFile.filename}`;
+    const videos = JSON.parse(fs.readFileSync(videosPath));
+    videos.push({ title, category, url: videoUrl, uploader: req.session.username });
+    fs.writeFileSync(videosPath, JSON.stringify(videos, null, 2));
+  
+    res.redirect(`/video/dashboard/${category}`);
+  };
+  
+  
 
 exports.getDashboard = (req, res) => {
   const filter = req.params.videofilter;
