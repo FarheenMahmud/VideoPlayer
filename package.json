@@ -1,22 +1,17 @@
 {
-  "name": "videoplayer",
+  "name": "videoplayernew",
   "version": "1.0.0",
   "description": "",
-  "main": "module_path_test.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FarheenMahmud/VideoPlayer.git"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/FarheenMahmud/VideoPlayer/issues"
-  },
-  "homepage": "https://github.com/FarheenMahmud/VideoPlayer#readme"
+  "dependencies": {
+    "express": "^5.1.0",
+    "pug": "^3.0.3"
+  }
 }
