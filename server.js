@@ -22,10 +22,26 @@ app.use('/resources', express.static(path.join(__dirname, 'resources')));
 // View Engine
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
+app.use(express.static('public'));
+
+
+app.use('/auth', require('./routes/auth'));
+app.use('/videos', require('./routes/videos'));
 
 // Routes
 app.use('/auth', authRoutes);
 app.use('/video', videoRoutes);
+
+res.render('home'); // assuming views/home.pug exists
+
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static('public'));
+
+
+app.use('/auth', require('./routes/auth'));
+app.use('/videos', require('./routes/videos'));
 
 // Redirect root
 app.get('/', (req, res) => {
