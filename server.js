@@ -21,7 +21,7 @@ app.use('/resources', express.static(path.join(__dirname, 'resources')));
 // View Engine
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.static('public'));
+
 
 // Routes
 app.use('/auth', authRoutes);
