@@ -20,25 +20,29 @@ exports.getRegister = (req, res) => {
 };
 
 exports.postRegister = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, name, password } = req.body;
   const users = safeReadJSON(usersPath);
 
-  if (users.find(user => user.username === username)) {
-    return res.status(400).send('User already exists');
+  if (!email || !name || !password) {
+    return res.render('register', { error: 'All fields are required.' });
+  }
+
+  if (users.find(user => user.email === email)) {
+    return res.render('register', { error: 'User already exists.' });
   }
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    users.push({ username, password: hashedPassword });
+    users.push({ email, name, password: hashedPassword });
 
     fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
-    req.session.username = username;
-    res.redirect('/video/dashboard/all');
+    res.render('account_created', { email });
   } catch (err) {
     console.error('Error during registration:', err);
     res.status(500).send('Server error');
   }
 };
+
 
 exports.getLogin = (req, res) => {
   res.render('login');
