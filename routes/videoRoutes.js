@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const videoController = require('../controllers/videoController');
 const authMiddleware = require('../middleware/authMiddleware');
+const videos = require('../data/videos.json');
 
 router.get('/new_video', authMiddleware, videoController.getNewVideo);
 router.post('/new', authMiddleware, videoController.postNewVideo);

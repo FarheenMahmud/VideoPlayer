@@ -1,12 +1,22 @@
 // controllers/videoController.js
 const fs = require('fs');
 const path = require('path');
-const videosPath = path.join(__dirname, '../data/videos.json');
+const videosPath = path.join(__dirname, 'data/videos.json');
 
 exports.getNewVideo = (req, res) => {
   if (!req.session.username) return res.redirect('/auth/login');
   res.render('new_video');
 };
+
+function loadVideos() {
+  try {
+    const data = fs.readFileSync(videosPath);
+    return JSON.parse(data);
+  } catch (err) {
+    console.error('Failed to load videos:', err);
+    return [];
+  }
+}
 
 exports.postNewVideo = (req, res) => {
   const { title, category, url } = req.body;

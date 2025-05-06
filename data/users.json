@@ -9,13 +9,28 @@
     "password": "$2b$10$MdWhOfNfmDEAF/uC3TqGUe.VVRJbHeVGkzSuodx4EvTN3MDR00p1G"
   },
   {
-    "email": "suckmy@dick.com",
-    "name": "suckmydick",
-    "password": "$2b$10$u5Hk11qES4OKkseR.e.L4.7Q.7m9qKB1F9ZcQxcfrxFpACByyBxeO"
-  },
-  {
     "email": "weenie@hutjr.com",
     "name": "bambi",
     "password": "$2b$10$St0ifCQpfQwELkMNYw3.QeFmogeb16L0HdKHCWNv7EcimLFiTLo/."
+  },
+  {
+    "email": "steppenwolf@gmail.com",
+    "name": "steppenwolf",
+    "password": "$2b$10$sQWWVyAytobbJDfn4UQOwe8TGwVOFlutSKZhcCZHCG1847quFOzfe"
+  },
+  {
+    "email": "bambi@gmail.com",
+    "name": "Bambi",
+    "password": "$2b$10$QXNpZJAKX/yecmxoQg1aQuad8cIFzGiKIWhsoYsUTtjbbozrJAsg."
+  },
+  {
+    "email": "george@gmail.com",
+    "name": "george",
+    "password": "$2b$10$RCoEfFGgNiXfFP3Lx3as5eddmxxt/lZFzGRtKYrdkD2XotXtjGvlW"
+  },
+  {
+    "email": "ada@gmail.com",
+    "name": "Ada Lovelace",
+    "password": "$2b$10$O2KlNiwOtIYyHGx.yFXyeeWzST6u8gfwqlDgtJR5yEulsHICzoDHi"
   }
 ]
