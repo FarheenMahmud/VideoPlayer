@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const bcrypt = require('bcrypt'); // ⬅️ Add this
+const bcrypt = require('bcrypt'); 
 
 const usersPath = path.join(__dirname, '../data/users.json');
 
