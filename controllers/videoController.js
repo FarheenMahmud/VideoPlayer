@@ -9,24 +9,33 @@ exports.getNewVideo = (req, res) => {
 };
 
 exports.postNewVideo = (req, res) => {
-    const { title, category } = req.body;
-    const videoFile = req.file;
-  
-    if (!videoFile) return res.status(400).send('No video uploaded');
-  
-    const videoUrl = `/resources/uploads/${videoFile.filename}`;
-    const videos = JSON.parse(fs.readFileSync(videosPath));
-    videos.push({ title, category, url: videoUrl, uploader: req.session.username });
-    fs.writeFileSync(videosPath, JSON.stringify(videos, null, 2));
-  
-    res.redirect(`/video/dashboard/${category}`);
-  };
+  const { title, category, url } = req.body;
+
+  if (!title || !category || !url) {
+    return res.render('new_video', { error: 'All fields are required.' });
+  }
+
+  const videos = JSON.parse(fs.readFileSync(videosPath));
+  videos.push({ title, category, url, uploader: req.session.email });
+  fs.writeFileSync(videosPath, JSON.stringify(videos, null, 2));
+
+  res.render('new_video', { success: 'Video added successfully.' });
+};
+
   
   
 
-exports.getDashboard = (req, res) => {
-  const filter = req.params.videofilter;
-  const videos = JSON.parse(fs.readFileSync(videosPath));
-  const filteredVideos = filter === 'all' ? videos : videos.filter(v => v.category === filter);
-  res.render('dashboard', { username: req.session.username, videos: filteredVideos });
-};
+  exports.getDashboard = (req, res) => {
+    const filter = req.params.videofilter;
+    const videos = JSON.parse(fs.readFileSync(videosPath));
+    let filteredVideos = [];
+  
+    if (filter === 'all') {
+      filteredVideos = videos;
+    } else if (filter === 'mine') {
+      filteredVideos = videos.filter(v => v.uploader === req.session.email);
+    }
+  
+    res.render('dashboard', { name: req.session.name, videos: filteredVideos });
+  };
+  
