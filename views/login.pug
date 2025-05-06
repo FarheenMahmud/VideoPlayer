@@ -8,9 +8,8 @@ link(rel='stylesheet', href='/resources/css/style.css')
 body
     h1 Login
     form(action="/auth/login" method="POST")
-      label(for="name") Username:
-input(type="text" name="name" required)
-
+      label(for="username") Username:
+      input(type="text" name="username" required)
       br
       label(for="password") Password:
       input(type="password" name="password" required)
