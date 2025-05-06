@@ -37,6 +37,6 @@ exports.postNewVideo = (req, res) => {
       filteredVideos = videos.filter(v => v.uploader === req.session.email);
     }
   
-    res.render('dashboard', { name: req.session.name, videos: filteredVideos });
+    res.render('dashboard', { username: req.session.name, videos: filteredVideos });
   };
   

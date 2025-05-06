@@ -19,7 +19,7 @@ html
       |  |
       a(href="/logout") Logout
     main
-      h2 Your Videos
+      h2 #{filterLabel} Videos
       if videos.length
         .video-list
           each video in videos
@@ -27,7 +27,8 @@ html
               h3= video.title
               p Category: #{video.category}
               p Uploader: #{video.uploader}
-              video(controls, width="100%")
+              iframe(width="560" height="315" src=video.url frameborder="0" allowfullscreen)
+
                 source(src=video.url, type="video/mp4")
       else
         p No videos uploaded yet.
