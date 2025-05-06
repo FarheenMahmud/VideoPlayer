@@ -2,7 +2,8 @@ doctype html
 html
   head
     title Dashboard
-    link(rel="stylesheet", href="/style.css")
+    link(rel="stylesheet", href="/resources/css/style.css")
+
   body
     header
       h1 Welcome, #{username}!
@@ -27,7 +28,14 @@ html
               h3= video.title
               p Category: #{video.category}
               p Uploader: #{video.uploader}
-              iframe(width="560" height="315" src=video.url frameborder="0" allowfullscreen)
+              iframe(
+              width="560"
+              height="315"
+              src=`https://www.youtube.com/embed/${video.youtubeId}`
+              frameborder="0"
+              allowfullscreen
+)
+
 
                 source(src=video.url, type="video/mp4")
       else
