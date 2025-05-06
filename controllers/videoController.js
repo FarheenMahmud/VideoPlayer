@@ -40,3 +40,45 @@ exports.postNewVideo = (req, res) => {
     res.render('dashboard', { username: req.session.name, videos: filteredVideos });
   };
   
+  
+  function convertToEmbedUrl(youtubeUrl) {
+    const urlObj = new URL(youtubeUrl);
+    const hostname = urlObj.hostname;
+    let videoId = '';
+  
+    // Handle both youtu.be and youtube.com links
+    if (hostname.includes('youtube.com')) {
+      videoId = urlObj.searchParams.get('v');
+    } else if (hostname === 'youtu.be') {
+      videoId = urlObj.pathname.slice(1);
+    }
+  
+    if (videoId) {
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+  
+    return null; // Return null if parsing fails
+  }
+  
+  exports.postNewVideo = (req, res) => {
+    const { title, category, url } = req.body;
+    const uploader = req.session.name;
+  
+    const embedUrl = convertToEmbedUrl(url);
+    if (!embedUrl) {
+      return res.status(400).send('Invalid YouTube URL.');
+    }
+  
+    const newVideo = { title, category, url: embedUrl, uploader };
+  
+    const data = readFile();
+    data.videos.push(newVideo);
+    writeFile(data);
+  
+    res.redirect('/video/dashboard/mine');
+  };
+  
+  if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+    return res.status(400).send('Only YouTube URLs are allowed.');
+  }
+  
