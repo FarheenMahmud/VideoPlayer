@@ -14,7 +14,5 @@ function extractYouTubeId(url) {
   return match ? match[1] : null;
 }
 
-videos.forEach(video => {
-  video.youtubeId = extractYouTubeId(video.url);
-});
+
 

@@ -23,22 +23,30 @@ exports.postNewVideo = (req, res) => {
 };
 
 
-  
+function extractYouTubeId(url) {
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+  return match ? match[1] : null;
+}
   
 
-  exports.getDashboard = (req, res) => {
-    const filter = req.params.videofilter;
-    const videos = JSON.parse(fs.readFileSync(videosPath));
-    let filteredVideos = [];
-  
-    if (filter === 'all') {
-      filteredVideos = videos;
-    } else if (filter === 'mine') {
-      filteredVideos = videos.filter(v => v.uploader === req.session.email);
-    }
-  
-    res.render('dashboard', { username: req.session.name, videos: filteredVideos });
-  };
+exports.getDashboard = (req, res) => {
+  const filter = req.params.videofilter;
+  const videos = loadVideos(); // however you're loading videos from file
+
+  const filteredVideos = filter === 'All'
+    ? videos
+    : videos.filter(v => v.category === filter);
+
+  // add YouTube ID to each video
+  filteredVideos.forEach(video => {
+    video.youtubeId = extractYouTubeId(video.url);
+  });
+
+  res.render('dashboard', {
+    user: req.session.user,
+    videos: filteredVideos
+  });
+};
   
   
   function convertToEmbedUrl(youtubeUrl) {
