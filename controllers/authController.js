@@ -1,6 +1,7 @@
-// controllers/authController.js
 const fs = require('fs');
 const path = require('path');
+const bcrypt = require('bcrypt'); // ⬅️ Add this
+
 const usersPath = path.join(__dirname, '../data/users.json');
 
 function safeReadJSON(filePath) {
@@ -16,7 +17,7 @@ exports.getRegister = (req, res) => {
   res.render('register');
 };
 
-exports.postRegister = (req, res) => {
+exports.postRegister = async (req, res) => {
   const { username, password } = req.body;
   const users = safeReadJSON(usersPath);
 
@@ -24,7 +25,9 @@ exports.postRegister = (req, res) => {
     return res.status(400).send('User already exists');
   }
 
-  users.push({ username, password });
+  const hashedPassword = await bcrypt.hash(password, 10);
+  users.push({ username, password: hashedPassword });
+
   fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
   req.session.username = username;
   res.redirect('/video/dashboard/all');
@@ -34,12 +37,15 @@ exports.getLogin = (req, res) => {
   res.render('login');
 };
 
-exports.postLogin = (req, res) => {
+exports.postLogin = async (req, res) => {
   const { username, password } = req.body;
   const users = safeReadJSON(usersPath);
 
-  const user = users.find(u => u.username === username && u.password === password);
+  const user = users.find(u => u.username === username);
   if (!user) return res.status(401).send('Invalid credentials');
+
+  const passwordMatch = await bcrypt.compare(password, user.password);
+  if (!passwordMatch) return res.status(401).send('Invalid credentials');
 
   req.session.username = username;
   res.redirect('/video/dashboard/all');
