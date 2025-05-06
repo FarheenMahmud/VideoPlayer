@@ -78,5 +78,3 @@ exports.postNewVideo = (req, res) => {
     res.redirect('/video/dashboard/mine');
   };
   
- 
-  

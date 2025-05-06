@@ -1,7 +1,16 @@
 [
-    {
-      "username": "admin",
-      "password": "$2b$10$Jg7x4NWZEdKz98j7g5wS0.lCvM0iUOwhj554BElwKsvzFwJ9j9jO"
-    }
-  ]
-  
+  {
+    "username": "admin",
+    "password": "$2b$10$Jg7x4NWZEdKz98j7g5wS0.lCvM0iUOwhj554BElwKsvzFwJ9j9jO"
+  },
+  {
+    "email": "adsdaq@jack.com",
+    "name": "adsads",
+    "password": "$2b$10$MdWhOfNfmDEAF/uC3TqGUe.VVRJbHeVGkzSuodx4EvTN3MDR00p1G"
+  },
+  {
+    "email": "suckmy@dick.com",
+    "name": "suckmydick",
+    "password": "$2b$10$u5Hk11qES4OKkseR.e.L4.7Q.7m9qKB1F9ZcQxcfrxFpACByyBxeO"
+  }
+]
