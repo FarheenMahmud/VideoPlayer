@@ -49,30 +49,31 @@ exports.getLogin = (req, res) => {
 };
 
 exports.postLogin = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   const users = safeReadJSON(usersPath);
 
-  console.log('Received login request:', username); // Log the username for debugging
+  if (!email || !password) {
+    return res.render('login', { error: 'All fields are required.' });
+  }
 
-  const user = users.find(u => u.username === username);
+  const user = users.find(u => u.email === email);
   if (!user) {
-    console.log('User not found:', username); // Log if the user is not found
-    return res.status(401).send('Invalid credentials');
+    return res.render('login', { error: 'Invalid credentials.' });
   }
 
   try {
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      console.log('Password mismatch for user:', username); // Log if the password doesn't match
-      return res.status(401).send('Invalid credentials');
+      return res.render('login', { error: 'Invalid credentials.' });
     }
 
-    req.session.username = username;
-    console.log('Login successful:', username); // Log when login is successful
+    req.session.email = user.email;
+    req.session.name = user.name;
     res.redirect('/video/dashboard/all');
   } catch (err) {
-    console.error('Error during login:', err); // Log any unexpected errors
+    console.error('Error during login:', err);
     res.status(500).send('Server error');
   }
 };
+
 
