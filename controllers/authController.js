@@ -48,25 +48,27 @@ exports.postLogin = async (req, res) => {
   const { username, password } = req.body;
   const users = safeReadJSON(usersPath);
 
-  // Find the user by username
+  console.log('Received login request:', username); // Log the username for debugging
+
   const user = users.find(u => u.username === username);
   if (!user) {
-    console.log('User not found:', username);
+    console.log('User not found:', username); // Log if the user is not found
     return res.status(401).send('Invalid credentials');
   }
 
   try {
-    // Compare the entered password with the hashed password
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      console.log('Password mismatch for user:', username);
+      console.log('Password mismatch for user:', username); // Log if the password doesn't match
       return res.status(401).send('Invalid credentials');
     }
 
     req.session.username = username;
+    console.log('Login successful:', username); // Log when login is successful
     res.redirect('/video/dashboard/all');
   } catch (err) {
-    console.error('Error during login:', err);
+    console.error('Error during login:', err); // Log any unexpected errors
     res.status(500).send('Server error');
   }
 };
+
