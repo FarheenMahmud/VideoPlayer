@@ -1,25 +1,23 @@
 doctype html
 html
   head
-    title Upload Video
-    link(rel="stylesheet", href="/style.css")
+    title Share New Video
   body
-    main
-      h1 Upload New Video
-      form(action="/video/upload", method="POST", enctype="multipart/form-data")
-        label(for="title") Title:
-        input(type="text", name="title", required)
-        br
-        label(for="category") Category:
-        select(name="category")
-          option(value="music") Music
-          option(value="sports") Sports
-          option(value="news") News
-          option(value="other") Other
-        br
-        label(for="videoFile") Choose Video:
-        input(type="file", name="videoFile", accept="video/*", required)
-        br
-        button(type="submit") Upload
-      p
-        a(href="/video/dashboard/all") Back to Dashboard
+    h1 Share a New Video
+    if error
+      p(style="color:red") #{error}
+    if success
+      p(style="color:green") #{success}
+    form(action="/video/new" method="POST")
+      label(for="title") Title:
+      input(type="text" name="title" required)
+      br
+      label(for="category") Category:
+      input(type="text" name="category" required)
+      br
+      label(for="url") YouTube URL:
+      input(type="url" name="url" required)
+      br
+      button(type="submit") Add Video
+    p
+      a(href="/video/dashboard/all") Back to Dashboard
