@@ -78,7 +78,5 @@ exports.postNewVideo = (req, res) => {
     res.redirect('/video/dashboard/mine');
   };
   
-  if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
-    return res.status(400).send('Only YouTube URLs are allowed.');
-  }
+ 
   
