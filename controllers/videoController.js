@@ -1,98 +1,74 @@
-// controllers/videoController.js
 const fs = require('fs');
 const path = require('path');
-const videosPath = path.join(__dirname, 'data/videos.json');
 
-exports.getNewVideo = (req, res) => {
-  if (!req.session.username) return res.redirect('/auth/login');
-  res.render('new_video');
-};
+const videosPath = path.join(__dirname, '..', 'data', 'videos.json');
 
 function loadVideos() {
-  try {
-    const data = fs.readFileSync(videosPath);
-    return JSON.parse(data);
-  } catch (err) {
-    console.error('Failed to load videos:', err);
-    return [];
-  }
+    try {
+        const data = fs.readFileSync(videosPath, 'utf8');
+        const videos = JSON.parse(data);
+        console.log("Loaded videos:", videos);
+        return videos;
+    } catch (err) {
+        console.error('Failed to load videos:', err);
+        return [];
+    }
+}
+
+function extractYouTubeId(url) {
+    const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
 }
 
 exports.postNewVideo = (req, res) => {
-  const { title, category, url } = req.body;
-
-  if (!title || !category || !url) {
-    return res.render('new_video', { error: 'All fields are required.' });
-  }
-
-  const videos = JSON.parse(fs.readFileSync(videosPath));
-  videos.push({ title, category, url, uploader: req.session.email });
-  fs.writeFileSync(videosPath, JSON.stringify(videos, null, 2));
-
-  res.render('new_video', { success: 'Video added successfully.' });
-};
-
-
-function extractYouTubeId(url) {
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
-  return match ? match[1] : null;
-}
-  
-
-exports.getDashboard = (req, res) => {
-  const filter = req.params.videofilter;
-  const videos = loadVideos(); // however you're loading videos from file
-
-  const filteredVideos = filter === 'All'
-    ? videos
-    : videos.filter(v => v.category === filter);
-
-  // add YouTube ID to each video
-  filteredVideos.forEach(video => {
-    video.youtubeId = extractYouTubeId(video.url);
-  });
-
-  res.render('dashboard', {
-    user: req.session.user,
-    videos: filteredVideos
-  });
-};
-  
-  
-  function convertToEmbedUrl(youtubeUrl) {
-    const urlObj = new URL(youtubeUrl);
-    const hostname = urlObj.hostname;
-    let videoId = '';
-  
-    // Handle both youtu.be and youtube.com links
-    if (hostname.includes('youtube.com')) {
-      videoId = urlObj.searchParams.get('v');
-    } else if (hostname === 'youtu.be') {
-      videoId = urlObj.pathname.slice(1);
-    }
-  
-    if (videoId) {
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
-  
-    return null; // Return null if parsing fails
-  }
-  
-  exports.postNewVideo = (req, res) => {
     const { title, category, url } = req.body;
     const uploader = req.session.name;
-  
-    const embedUrl = convertToEmbedUrl(url);
-    if (!embedUrl) {
-      return res.status(400).send('Invalid YouTube URL.');
+    const embedUrl = convertToEmbedUrl(url); // Corrected version
+
+    if (!title || !category || !url) {
+        return res.render('new_video', { error: 'All fields are required.' });
     }
-  
-    const newVideo = { title, category, url: embedUrl, uploader };
-  
-    const data = readFile();
-    data.videos.push(newVideo);
-    writeFile(data);
-  
-    res.redirect('/video/dashboard/mine');
-  };
-  
+
+    const newVideo = { title, category, url: embedUrl || url, uploader }; //use embedUrl
+
+    try {
+        const videos = loadVideos();
+        videos.push(newVideo);
+        fs.writeFileSync(videosPath, JSON.stringify(videos, null, 2), 'utf8');
+        res.redirect('/video/dashboard/mine');
+    } catch (error) {
+        console.error("Error saving new video", error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+exports.getDashboard = (req, res) => {
+    const filter = req.params.videofilter;
+    const videos = loadVideos();
+    const filteredVideos = (filter === 'All') ? videos : videos.filter(v => v.category === filter);
+
+    filteredVideos.forEach(video => {
+        video.youtubeId = extractYouTubeId(video.url); // Use the corrected function
+    });
+
+    res.render('dashboard', {
+        user: req.session.user,
+        videos: filteredVideos,
+    });
+};
+
+exports.getNewVideo = (req, res) => {
+    if (!req.session.name) {
+        return res.redirect('/auth/login');
+    }
+    res.render('new_video');
+};
+
+function convertToEmbedUrl(youtubeUrl) {
+    const videoId = extractYouTubeId(youtubeUrl);
+    if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`;
+    }
+    return null;
+}
